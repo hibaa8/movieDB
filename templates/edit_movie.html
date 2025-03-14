@@ -1,0 +1,74 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container">
+    <h2>Edit Movie: {{ movie.title }}</h2>
+
+    <form id="edit-movie-form">
+        <input type="hidden" id="movie-id" value="{{ movie.id }}">
+
+        <div class="mb-3">
+            <label for="title" class="form-label">Title</label>
+            <input type="text" class="form-control" id="title" value="{{ movie.title }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="release_year" class="form-label">Release Year</label>
+            <input type="number" class="form-control" id="release_year" value="{{ movie.release_year }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="summary" class="form-label">Summary</label>
+            <textarea class="form-control" id="summary">{{ movie.summary }}</textarea>
+        </div>
+
+        <div class="mb-3">
+            <label for="director" class="form-label">Director(s) (comma-separated)</label>
+            <input type="text" class="form-control" id="director" value="{{ movie.director | join(', ') }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="actors" class="form-label">Actors (comma-separated)</label>
+            <input type="text" class="form-control" id="actors" value="{{ movie.actors | join(', ') }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="budget" class="form-label">Budget ($)</label>
+            <input type="number" class="form-control" id="budget" value="{{ movie.budget }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="genres" class="form-label">Genres (comma-separated)</label>
+            <input type="text" class="form-control" id="genres" value="{{ movie.genres | join(', ') }}">
+        </div>
+
+        <!-- Ratings Section -->
+        <h4>Ratings</h4>
+        <div class="mb-3">
+            <label for="imdb" class="form-label">IMDb Rating (0-10)</label>
+            <input type="number" step="0.1" class="form-control" id="imdb" value="{{ movie.ratings.imdb }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="rotten_tomatoes" class="form-label">Rotten Tomatoes (%)</label>
+            <input type="number" class="form-control" id="rotten_tomatoes" value="{{ movie.ratings.rotten_tomatoes[:-1] }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="common_sense" class="form-label">Common Sense (0-5)</label>
+            <input type="number" step="0.1" class="form-control" id="common_sense" value="{{ movie.ratings.common_sense.split('/')[0] }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="google_ratings" class="form-label">Google Ratings (%)</label>
+            <input type="number" class="form-control" id="google_ratings" value="{{ movie.ratings.google_ratings[:-1] }}">
+        </div>
+
+        <button type="button" id="submit-edit" class="btn btn-primary">Submit</button>
+        <button type="button" id="discard-edit" class="btn btn-danger">Discard Changes</button>
+    </form>
+</div>
+
+<script src="{{ url_for('static', filename='js/edit_movie.js') }}"></script>
+
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    
+<script>
+    let results = {{ results | tojson }};
+    let query = {{ query | tojson }};
+    let queryWords = {{ query_words | tojson }};
+</script>
+<div id="index-title"> 
+    <h1>Search Results for "{{ query }}"</h1> 
+    <p>Found {{ result_count }} result(s)</p>
+</div>
+
+<div id="search-results-container">
+    {% if results %}
+        {% for movie in results %}
+            <div class="movie-card">
+                <a href="/view/{{ movie['id'] }}">
+                    <img src="{{ movie['image'] }}" alt="{{ movie['title'] }}" class="movie-image">
+                </a>
+                <h3>{{ movie['highlighted']['title'] | safe }}</h3>
+                <p><strong>IMDb Rating:</strong> {{ movie["ratings"]["imdb"] }}</p>
+
+                {% if "Director" in movie.matched_fields %}
+                    <p><strong>Director:</strong> {{ movie['highlighted']['director'] | join(", ") | safe }}</p>
+                {% endif %}
+
+                {% if "Actors" in movie.matched_fields %}
+                    <p><strong>Actors:</strong> {{ movie['highlighted']['actors'] | join(", ") | safe }}</p>
+                {% endif %}
+
+                {% if "Genres" in movie.matched_fields %}
+                    <p><strong>Genres:</strong> {{ movie['highlighted']['genres'] | join(", ") | safe }}</p>
+                {% endif %}
+
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No results found.</p>
+    {% endif %}    
+</div>
+
+<style>
+    .highlight {
+        background-color: yellow;
+        font-weight: bold;
+    }
+    .matched-info {
+        font-size: 14px;
+        font-style: italic;
+        color: gray;
+    }
+</style>
+
+
+{% endblock %}

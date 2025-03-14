@@ -1,0 +1,18 @@
+.movie-image {
+    height:300px;
+}
+
+.movie-image-big {
+    height:450px;
+}
+
+.movie-image, .movie-image-big{
+    margin: 0 auto;
+}
+
+.d-flex{
+    width:50%;
+}
+#index-title{
+    padding:20px 0 20px 0;
+}

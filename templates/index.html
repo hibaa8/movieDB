@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    
+<script>
+    let popular_movies = {{popular_movies|tojson}} 
+</script>
+
+<div id="index-title">
+    <h3> Popular Picks for Today</h3>
+</div>
+
+<div id="pop-movie-container"></div>
+
+{% endblock %}

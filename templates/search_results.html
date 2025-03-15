@@ -7,51 +7,45 @@
     let query = {{ query | tojson }};
     let queryWords = {{ query_words | tojson }};
 </script>
-<div id="index-title"> 
-    <h1>Search Results for "{{ query }}"</h1> 
+
+<div class="container mt-4">
+    <h1 class="mb-3">Search Results for "{{ query }}"</h1> 
     <p>Found {{ result_count }} result(s)</p>
+
+    <div class="row g-4">
+        {% if results %}
+            {% for movie in results %}
+                <div class="col-md-4 d-flex align-items-stretch">
+                    <div class="movie-container">
+                        <a href="/view/{{ movie['id'] }}">
+                            <img src="{{ movie['image'] }}" alt="{{ movie['title'] }} poster" class="img-fluid movie-image">
+                        </a>
+                        <div class="movie-info">
+                            <p class="movie-title-card">{{ movie['highlighted']['title'] | safe }}</p>
+                            <p class="movie-details"><strong>Release Year:</strong> {{ movie["release_year"] }}</p>
+                            <p class="movie-details"><strong>IMDb Rating:</strong> {{ movie["ratings"]["imdb"] }}</p>
+
+                            {% if "Director" in movie.matched_fields %}
+                                <p class="movie-details"><strong>Director:</strong> {{ movie['highlighted']['director'] | join(", ") | safe }}</p>
+                            {% endif %}
+
+                            {% if "Actors" in movie.matched_fields %}
+                                <p class="movie-details"><strong>Actors:</strong> {{ movie['highlighted']['actors'] | join(", ") | safe }}</p>
+                            {% endif %}
+
+                            {% if "Genres" in movie.matched_fields %}
+                                <p class="movie-details"><strong>Genres:</strong> {{ movie['highlighted']['genres'] | join(", ") | safe }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No results found.</p>
+        {% endif %}
+    </div>
 </div>
 
-<div id="search-results-container">
-    {% if results %}
-        {% for movie in results %}
-            <div class="movie-card">
-                <a href="/view/{{ movie['id'] }}">
-                    <img src="{{ movie['image'] }}" alt="{{ movie['title'] }}" class="movie-image">
-                </a>
-                <h3>{{ movie['highlighted']['title'] | safe }}</h3>
-                <p><strong>IMDb Rating:</strong> {{ movie["ratings"]["imdb"] }}</p>
-
-                {% if "Director" in movie.matched_fields %}
-                    <p><strong>Director:</strong> {{ movie['highlighted']['director'] | join(", ") | safe }}</p>
-                {% endif %}
-
-                {% if "Actors" in movie.matched_fields %}
-                    <p><strong>Actors:</strong> {{ movie['highlighted']['actors'] | join(", ") | safe }}</p>
-                {% endif %}
-
-                {% if "Genres" in movie.matched_fields %}
-                    <p><strong>Genres:</strong> {{ movie['highlighted']['genres'] | join(", ") | safe }}</p>
-                {% endif %}
-
-            </div>
-        {% endfor %}
-    {% else %}
-        <p>No results found.</p>
-    {% endif %}    
-</div>
-
-<style>
-    .highlight {
-        background-color: yellow;
-        font-weight: bold;
-    }
-    .matched-info {
-        font-size: 14px;
-        font-style: italic;
-        color: gray;
-    }
-</style>
 
 
 {% endblock %}

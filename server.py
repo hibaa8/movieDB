@@ -216,7 +216,7 @@ def get_rating_color(rating):
     if rating >= 5:
         return "bg-success"  # Dark green
     else:
-        return "bg-warning"  # Yellow
+        return "bg-light-green"  # Yellow
 
 
 app.jinja_env.globals.update(get_rating_color=get_rating_color)

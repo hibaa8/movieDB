@@ -1,3 +1,5 @@
+
+
 .movie-image {
     height:300px;
 }
@@ -15,4 +17,256 @@
 }
 #index-title{
     padding:20px 0 20px 0;
+}
+
+/* Hero Header */
+.hero-header {
+    position: relative;
+    height: 55vh; /* Adjust height as needed */
+    background: url('https://resizing.flixster.com/yeZswUpep7ParqvSCjilk15LPfU=/fit-in/705x460/v2/https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p172920_i_h10_ac.jpg') no-repeat center center/cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+/* Overlay to improve text readability */
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3); /* Dark overlay */
+    backdrop-filter: blur(2px); /* Blur effect */
+}
+
+/* Centered Content */
+.hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+    padding: 20px;
+}
+
+
+/* popular movies */
+
+#pop-movie-container {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+.movie-container {
+    background: white;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    text-align: center;
+    padding-bottom: 15px; /* Ensures spacing for text */
+    width: 90%; /* Reduce width of the card */
+    transition: transform 0.2s ease-in-out;
+    height:98%;
+}
+
+.movie-container:hover {
+    transform: scale(1.01);
+}
+
+.movie-image {
+    width: 100%;
+    height: 350px;  /* Ensures all images are the same size */
+    object-fit: contain;  /* Prevents cropping */
+    background-color: #f8f9fa;
+
+}
+
+.movie-info {
+    padding: 10px;
+}
+
+.movie-title {
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.movie-title-card{
+    font-size: 1.3rem;
+    margin-bottom: 5px;
+}
+
+.movie-details {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 3px;
+}
+
+/* Ensure cards have spacing */
+.row.justify-content-center {
+    gap: 20px; /* Space between cards */
+}
+
+/* .container, .navbar{
+    background:grey;
+} */
+
+/* movie page */
+/* General Styling */
+.movie-title {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.movie-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.movie-details-container {
+    background: white;
+
+}
+
+.section-title {
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 8px;
+}
+
+.section-text {
+    font-size: 1.1rem;
+    color: #444;
+}
+
+/* Detail Text */
+.detail-title {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+.detail-text {
+    font-size: 1.1rem;
+    color: #555;
+}
+
+/* Ratings */
+.rating-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.rating-item {
+    margin-bottom: 5px;
+}
+
+.progress {
+    height: 10px;
+    border-radius: 5px;
+    width:96%;
+}
+
+.progress-bar {
+    transition: width 0.4s ease-in-out;
+}
+
+
+/* whole page */
+
+/* Site Background */
+.site-background {
+    background-color: #e9ebec; /* Light Grey Background */
+}
+
+/* Page Content Container */
+.page-container {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 30px;
+    max-width: 1200px;
+}
+
+/* Navbar Styling */
+.navbar-dark.bg-dark {
+    background-color: #343a40 !important; /* Dark Grey Navbar */
+    padding: 15px 0;
+}
+
+
+/* buttons */
+
+/* Primary Button Style */
+.btn,
+.btn-outline-secondary,
+.btn-success {
+    background-color: #218838;/* Bootstrap success green */
+    color: white;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.1s ease-in-out;
+}
+
+/* Hover Effect */
+.btn:hover,
+.btn-outline-secondary:hover,
+.btn-success:hover {
+    background-color: #28a745; /* Slightly darker green */
+    transform: scale(1.01);
+    color:white;
+}
+
+/* Make all buttons slightly rounded */
+.btn {
+    border-radius: 5px;
+    font-size: 1rem;
+    min-width:75px;
+    max-width:200px;
+    margin-left: 2px;
+    margin-right:2px;
+}
+
+
+/* Navbar Styling */
+.navbar-brand {
+    font-size: 1.5rem; /* Make title more prominent */
+    font-weight: bold;
+    color: white !important; /* Ensures contrast on dark navbar */
+    letter-spacing: 1px;
+}
+
+/* Hover Effect for "Add Movie" Link */
+.nav-link {
+    font-size: 20px;
+    font-weight: 500;
+    transition: color 0.3s ease-in-out;
+    text-decoration: none;
+    color:white;
+}
+
+/* Add Movie Link Hover */
+.nav-link:hover {
+    color: #28a745 !important; /* Green on hover */
+}
+
+body {
+    font-family: 'Poppins', sans-serif; /* Prettier, modern font */
+}
+
+/* search results */
+.highlight {
+    background-color: yellow;
+    font-weight: bold;
+}
+
+.matched-info {
+    font-size: 14px;
+    font-style: italic;
+    color: gray;
+}
+.bg-light-green {
+    background-color: #769d76 !important; /* Light Green */
 }

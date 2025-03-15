@@ -17,74 +17,100 @@
 
         <!-- Movie Details -->
         <div class="col-md-8">
-            <h4><strong>Summary</strong></h4>
-            <p>{{ movie["summary"] }}</p>
+            <div class="movie-details-container">
+                <h4 class="section-title"><strong>Summary</strong></h4>
+                <p class="section-text">{{ movie["summary"] }}</p>
 
-            <h5><strong>Release Year</strong></h5>
-            <p>{{ movie["release_year"] }}</p>
+                <p class="section-text"><b style="color: black">Release Year: </b> {{ movie["release_year"] }}</p>
 
-            <h5><strong>Genres</strong></h5>
-            <p>{{ movie["genres"] | join(', ') }}</p>
+                <p class="section-text"><b style="color: black">Genres: </b>{{ movie["genres"] | join(', ') }}</p>
 
-            <!-- Ratings with Progress Bars -->
-            <h4><strong>Ratings</strong></h4>
-            <p><strong>IMDb:</strong> {{ movie["ratings"]["imdb"] }}</p>
-            <div class="progress mb-2">
-                <div class="progress-bar {{ get_rating_color(movie['ratings']['imdb'] | float * 10) }}" 
-                    role="progressbar" 
-                    style="width: {{ movie['ratings']['imdb'] | float * 10 }}%;" 
-                    aria-valuenow="{{ movie['ratings']['imdb'] }}" 
-                    aria-valuemin="0" aria-valuemax="10">
+                <!-- Ratings with Progress Bars -->
+                <h4 class="section-title"><strong>Ratings</strong></h4>
+
+                <div class="rating-container">
+                    <div class="rating-item">
+                        <p><strong>IMDb:</strong> {{ movie["ratings"]["imdb"] }}</p>
+                        <div class="progress">
+                            <div class="progress-bar {{ get_rating_color(movie['ratings']['imdb'] | float * 10) }}" 
+                                role="progressbar" 
+                                style="width: {{ movie['ratings']['imdb'] | float * 10 }}%;" 
+                                aria-valuenow="{{ movie['ratings']['imdb'] }}" 
+                                aria-valuemin="0" aria-valuemax="10">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="rating-item">
+                        <p><strong>Rotten Tomatoes:</strong> {{ movie["ratings"]["rotten_tomatoes"] }}</p>
+                        <div class="progress">
+                            <div class="progress-bar {{ get_rating_color(movie['ratings']['rotten_tomatoes'][:-1]) }}" 
+                                role="progressbar" 
+                                style="width: {{ movie['ratings']['rotten_tomatoes'][:-1] | float }}%;" 
+                                aria-valuenow="{{ movie['ratings']['rotten_tomatoes'][:-1] }}" 
+                                aria-valuemin="0" aria-valuemax="100">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="rating-item">
+                        <p><strong>Common Sense:</strong> {{ movie["ratings"]["common_sense"] }}</p>
+                        <div class="progress">
+                            <div class="progress-bar {{ get_rating_color(movie['ratings']['common_sense'].split('/')[0] | float * 20) }}" 
+                                role="progressbar" 
+                                style="width: {{ movie['ratings']['common_sense'].split('/')[0] | float * 20 }}%;" 
+                                aria-valuenow="{{ movie['ratings']['common_sense'].split('/')[0] }}" 
+                                aria-valuemin="0" aria-valuemax="5">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="rating-item">
+                        <p><strong>Google Ratings:</strong> {{ movie["ratings"]["google_ratings"] }}</p>
+                        <div class="progress">
+                            <div class="progress-bar {{ get_rating_color(movie['ratings']['google_ratings'][:-1]) }}" 
+                                role="progressbar" 
+                                style="width: {{ movie['ratings']['google_ratings'][:-1] | float }}%;" 
+                                aria-valuenow="{{ movie['ratings']['google_ratings'][:-1] }}" 
+                                aria-valuemin="0" aria-valuemax="100">
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
 
-            <p><strong>Rotten Tomatoes:</strong> {{ movie["ratings"]["rotten_tomatoes"] }}</p>
-            <div class="progress mb-2">
-                <div class="progress-bar {{ get_rating_color(movie['ratings']['rotten_tomatoes'][:-1]) }}" role="progressbar" 
-                    style="width: {{ movie['ratings']['rotten_tomatoes'][:-1] | float }}%;" 
-                    aria-valuenow="{{ movie['ratings']['rotten_tomatoes'][:-1] }}" aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
-
-            <p><strong>Common Sense:</strong> {{ movie["ratings"]["common_sense"] }}</p>
-            <div class="progress mb-2">
-                <div class="progress-bar {{ get_rating_color(movie['ratings']['common_sense'].split('/')[0] | float * 20) }}" role="progressbar" 
-                    style="width: {{ movie['ratings']['common_sense'].split('/')[0] | float * 20 }}%;" 
-                    aria-valuenow="{{ movie['ratings']['common_sense'].split('/')[0] }}" aria-valuemin="0" aria-valuemax="5"></div>
-            </div>
-
-            <p><strong>Google Ratings:</strong> {{ movie["ratings"]["google_ratings"] }}</p>
-            <div class="progress mb-2">
-                <div class="progress-bar {{ get_rating_color(movie['ratings']['google_ratings'][:-1]) }}" role="progressbar" 
-                    style="width: {{ movie['ratings']['google_ratings'][:-1] | float }}%;" 
-                    aria-valuenow="{{ movie['ratings']['google_ratings'][:-1] }}" aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
-
-            <!-- Actors & Directors -->
-            <div class="row">
-                <div class="col-md-6">
-                    <h5><strong>Actors</strong></h5>
-                    <p>{{ movie["actors"] | join(', ') }}</p>
-                </div>
-                <div class="col-md-6">
-                    <h5><strong>Director(s)</strong></h5>
-                    <p>{{ movie["director"] | join(', ') }}</p>
+                <!-- Actors & Directors -->
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <h5 class="detail-title"><strong>Actors:</strong></h5>
+                        <p class="detail-text">{{ movie["actors"] | join(', ') }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h5 class="detail-title"><strong>Director(s):</strong></h5>
+                        <p class="detail-text">{{ movie["director"] | join(', ') }}</p>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+        </div>
 
     <!-- Similar Movies Section -->
     {% if movie["similar_movie_ids"] %}
-        <div class="mt-4 p-3 border rounded shadow-sm">
+        <div class="mt-4">
             <h4><strong>Similar Movies</strong></h4>
             <div class="row">
+    
+
                 {% for movie_id in movie["similar_movie_ids"] %}
                     {% if movie_id in data %}  
-                        <div class="col-md-4 text-center">
-                            <a href="/view/{{ movie_id }}">
-                                <img src="{{ data[movie_id]['image'] }}" alt="{{ data[movie_id]['title'] }} poster" class="img-thumbnail movie-image">
-                            </a>
-                            <p>{{ data[movie_id]['title'] }}</p>
+                        <div class="col-md-4 d-flex align-items-stretch">
+                            <div class="movie-container">
+                                <a href="/view/{{ movie_id }}">
+                                    <img src="{{ data[movie_id]['image'] }}" alt="{{ data[movie_id]['title'] }} poster" class="img-thumbnail movie-image">
+                                </a>
+                                <div class="movie-info">
+                                    <p class="movie-title-card">{{ data[movie_id]['title'] }}</p>
+                                </div>
+                            </div>
                         </div>
                     {% endif %}
                 {% endfor %}

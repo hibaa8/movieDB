@@ -1,10 +1,10 @@
-# 🎬 Best of Bollywood - Movie Database
+# Best of Bollywood - Movie Database
 
 Welcome to **Best of Bollywood**, a full-stack web application for exploring, adding, editing, and searching through a curated list of iconic and trending Bollywood movies. 
 
 ---
 
-## 💡 Features
+## Features
 
 - **Search Functionality**: Keyword-based AJAX search across titles, actors, directors, and genres with real-time highlighting of matched terms.
 - **Detailed Movie Pages**: Each movie has a dedicated view with images, summaries, ratings (with colored progress bars), and related movies.
@@ -14,14 +14,14 @@ Welcome to **Best of Bollywood**, a full-stack web application for exploring, ad
 
 ---
 
-## 🛠️ Technologies
+## Technologies
 
 - **Frontend**: HTML, CSS, Bootstrap, JavaScript (jQuery)
 - **Backend**: Python Flask
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 1. **Clone the repository**
    ```bash

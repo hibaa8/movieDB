@@ -9,7 +9,7 @@
 
         <div class="mb-3">
             <label for="title" class="form-label">Title</label>
-            <input type="text" class="form-control" id="title" value="{{ movie.title }}">
+            <input type="text" class="form-control" id="movie_title" value="{{ movie.title }}">
         </div>
 
         <div class="mb-3">
@@ -42,6 +42,11 @@
             <input type="text" class="form-control" id="genres" value="{{ movie.genres | join(', ') }}">
         </div>
 
+        <div class="mb-3">
+            <label for="genres" class="form-label">Similar Movies (comma-separated)</label>
+            <input type="text" class="form-control" id="similar-movies" value="{{ movie.similar_movie_ids | join(', ') }}">
+        </div>
+
         <!-- Ratings Section -->
         <h4>Ratings</h4>
         <div class="mb-3">
@@ -68,7 +73,5 @@
         <button type="button" id="discard-edit-btn" class="btn btn-danger">Discard Changes</button>
     </form>
 </div>
-
-<script src="{{ url_for('static', filename='js/edit_movie.js') }}"></script>
 
 {% endblock %}

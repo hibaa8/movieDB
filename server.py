@@ -210,20 +210,64 @@ data = {
 
 popular_movies = random.sample(list(data.values()), 3)
 
+
+def format_rating(value, rating_type):
+    if isinstance(value, (int, float)):
+        if rating_type == "imdb":
+            return f"{value:.1f}"  
+        elif rating_type in ["rotten_tomatoes", "google_ratings"]:
+            return f"{int(value)}%"  
+        elif rating_type == "common_sense":
+            return f"{int(value)}/5"  
+    elif isinstance(value, str):
+        value = value.strip()
+        if rating_type == "imdb":
+            return f"{float(value):.1f}" if value.replace('.', '', 1).isdigit() else "0.0"
+        elif rating_type in ["rotten_tomatoes", "google_ratings"]:
+            return value if value.endswith('%') and value[:-1].isdigit() else f"{int(float(value))}%" if value.replace('.', '', 1).isdigit() else "0%"
+        elif rating_type == "common_sense":
+            if "/" in value:
+                parts = value.split("/")
+                return f"{int(parts[0])}/5" if len(parts) == 2 and parts[1] == "5" else "0/5"
+            return f"{int(float(value))}/5" if value.replace('.', '', 1).isdigit() else "0/5"
+    return "0.0" if rating_type == "imdb" else "0%" if rating_type in ["rotten_tomatoes", "google_ratings"] else "0/5"
+
+
+
 def get_rating_color(rating):
-    rating = float(rating)//10 if rating else 0.0
-    print(rating)
-    if rating >= 5:
-        return "bg-success"  # Dark green
+    if isinstance(rating, (int, float)):
+        rating = rating // 10  
+    elif isinstance(rating, str):
+        rating = rating.strip()  
+        
+        if rating.endswith('%'):
+            rating = rating[:-1] 
+        elif '/' in rating:
+            parts = rating.split('/')
+            if len(parts) == 2 and parts[1].isdigit():
+                rating = float(parts[0]) / float(parts[1]) * 100 
+            else:
+                rating = 0 
+        else:
+            try:
+                rating = float(rating) * 10  
+            except ValueError:
+                rating = 0  
+    
     else:
-        return "bg-light-green"  # Yellow
+        rating = 0 
+    
+    if rating >= 5:
+        return "bg-success" 
+    else:
+        return "bg-light-green" 
 
 
 app.jinja_env.globals.update(get_rating_color=get_rating_color)
 
 # code by Hiba Altaf
 @app.route('/')
-def hello_world():
+def index():
    return render_template('index.html', popular_movies=popular_movies)   
 
 @app.route('/view/<int:item_id>')
@@ -290,13 +334,11 @@ def add_movie():
 
 @app.route('/add', methods=['POST'])
 def add():            
-    global data  # Movie storage dictionary
+    global data  
     global movie_id
     json_data = request.get_json()
     if not json_data:
         return jsonify({"error": "Invalid JSON data"}), 400  # Bad request if JSON is missing
-    # print(f'json data: {json_data}')
-
     movie_id += 1
     new_movie = {
         "id": movie_id,
@@ -307,18 +349,16 @@ def add():
         "director": json_data.get("director", []),
         "actors": json_data.get("actors", []),
         "budget": json_data.get("budget", 0),
-        "ratings": json_data.get("ratings", {
-            "imdb": "",
-            "rotten_tomatoes": "",
-            "common_sense": "",
-            "google_ratings": ""
-        }),
+        "ratings": {
+            "imdb": format_rating(json_data.get("ratings", {}).get("imdb", ""), "imdb"),
+            "rotten_tomatoes": format_rating(json_data.get("ratings", {}).get("rotten_tomatoes", ""), "rotten_tomatoes"),
+            "common_sense": format_rating(json_data.get("ratings", {}).get("common_sense", ""), "common_sense"),
+            "google_ratings": format_rating(json_data.get("ratings", {}).get("google_ratings", ""), "google_ratings")
+        },
         "genres": json_data.get("genres", []),
         "similar_movie_ids": json_data.get("similar_movie_ids", [])
     }
 
-    print(f'new movie')
-    print(new_movie)
 
     data[movie_id] = new_movie  # Add movie to dictionary
     return jsonify({"message": "Movie added successfully", "movie": new_movie})
@@ -339,7 +379,6 @@ def save_edit_movie(movie_id):
     if not json_data:
         return jsonify({"error": "Invalid JSON data"}), 400
 
-    # Update movie data
     data[movie_id].update({
         "title": json_data.get("title", data[movie_id]["title"]),
         "release_year": json_data.get("release_year", data[movie_id]["release_year"]),

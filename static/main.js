@@ -1,38 +1,9 @@
-// function displayPopularMovies(popular_movies) {
-//     let container = $("#pop-movie-container");
-//     container.empty(); // Clear existing content
-
-//     let row;
-//     $.each(popular_movies, function(i, movie) {
-//         if (i % 3 === 0) { // Create a new row every 3 movies
-//             row = $('<div class="row"></div>');
-//             container.append(row);
-//         }
-
-//         let movieDiv = `
-//         <div class="col-md-4">
-//             <div class="movie-container">
-//                 <a href="/view/${ movie.id }">
-//                     <img src="${ movie.image }" alt="${ movie.title } poster" class="movie-image">
-//                 </a>
-//                 <div class="movie-info">
-//                     <h4 class="movie-title">${ movie.title }</h4>
-//                     <p class="movie-details"><strong>Release Year:</strong> ${ movie.release_year }</p>
-//                     <p class="movie-details"><strong>IMDb Rating:</strong> ${ movie.ratings.imdb }</p>
-//                 </div>
-//             </div>
-//         </div>
-//         `;
-
-//         row.append(movieDiv);
-//     });
-// }
 
 function displayPopularMovies(popular_movies) {
     let container = $("#pop-movie-container");
-    container.empty(); // Clear existing content
+    container.empty(); 
 
-    let row = $('<div class="row g-3"></div>'); // Add spacing between columns
+    let row = $('<div class="row g-3"></div>'); 
     container.append(row);
 
     $.each(popular_movies, function(i, movie) {
@@ -55,9 +26,43 @@ function displayPopularMovies(popular_movies) {
     });
 }
 
+function validate_movie_data(newMovie){
+    const requiredFields = ["title", "image", "release_year", "summary", "director", "actors", "budget", "ratings", "genres"];
+    const ratingFields = ["imdb", "rotten_tomatoes", "common_sense", "google_ratings"];
+
+    for (const field of requiredFields) {
+        if (!newMovie[field] || (Array.isArray(newMovie[field]) && newMovie[field].length === 0)) {
+            alert(`Error: ${field.replace('_', ' ')} is required.`);
+            return false;
+        }
+    }
+
+    if (!/^\d{4}$/.test(newMovie.release_year)) {
+        alert("Error: Enter a valid 4-digit year.");
+        return false;
+    }
+
+    if (isNaN(newMovie.budget) || parseInt(newMovie.budget) < 0) {
+        alert("Error: Budget must be a non-negative number.");
+        return false;
+    }
+
+    for (const rating of ratingFields) {
+        if (!(rating in newMovie.ratings)) {
+            alert(`Error: Missing rating field - ${rating}`);
+            return false;
+        }
+        
+    }
+    return true
+
+}
+
 function save_movie(newMovie) {
-    console.log('new movie');
-    console.log(newMovie)
+    if (validate_movie_data(newMovie) == false){
+        return
+    }
+
     $.ajax({
         type: "POST",
         url: "/add",               
@@ -112,6 +117,20 @@ function isValidRating(value) {
     return /^\d+(\.\d+)?$/.test(value) && parseFloat(value) >= 0 && parseFloat(value) <= 10;
 }
 
+function validateField(selector, condition, errorMsg) {
+    if (!condition) {
+        let inputField = $(selector);
+
+        if (!inputField.next(".invalid-feedback").length) {
+            inputField.addClass("is-invalid").after(`<div class="invalid-feedback">${errorMsg}</div>`);
+        }
+
+        isValid = false;
+    } else {
+        $(selector).removeClass("is-invalid").next(".invalid-feedback").remove(); 
+    }
+}
+
 $(document).ready(function(){
     if (typeof popular_movies !== "undefined" && $("#pop-movie-container").is(":empty")) {  
         displayPopularMovies(popular_movies);
@@ -127,12 +146,9 @@ $(document).ready(function(){
     }) 
     $('#submit-movie-btn').click(function (event) {
         event.preventDefault();
-        $(".is-invalid").removeClass("is-invalid"); // Remove red borders
-        $(".invalid-feedback").remove(); // Remove existing error messages
+        $(".is-invalid").removeClass("is-invalid"); 
+        $(".invalid-feedback").remove(); 
     
-        let isValid = true;
-    
-        // Get input values
         let title = $('#movie-title').val().trim();
         let image = $('#movie-image').val().trim();
         let release_year = $('#release-year').val().trim();
@@ -147,20 +163,6 @@ $(document).ready(function(){
         let genres = $('#genres').val().trim();
         let similar_movie_ids = $('#similar-movies').val().trim();
     
-        function validateField(selector, condition, errorMsg) {
-            if (!condition) {
-                let inputField = $(selector);
-    
-                if (!inputField.next(".invalid-feedback").length) {
-                    inputField.addClass("is-invalid").after(`<div class="invalid-feedback">${errorMsg}</div>`);
-                }
-    
-                isValid = false;
-            } else {
-                $(selector).removeClass("is-invalid").next(".invalid-feedback").remove(); 
-            }
-        }
-    
         validateField("#movie-title", title.length > 0, "Movie title is required.");
         validateField("#release-year", /^\d{4}$/.test(release_year), "Enter a valid 4-digit year.");
         validateField("#movie-image", isValidUrl(image), "Enter a valid image URL.");
@@ -169,14 +171,11 @@ $(document).ready(function(){
         validateField("#actors", /^([a-zA-Z\s]+,?\s*)+$/.test(actors), "Enter valid names separated by commas.");
         validateField("#budget", /^\d+$/.test(budget) && parseInt(budget) >= 0, "Enter a non-negative budget.");
         validateField("#imdb", isValidRating(imdb), "Enter a rating between 0 and 10.");
-        validateField("#rotten_tomatoes", isValidRating(rotten_tomatoes), "Enter a rating between 0 and 10.");
-        validateField("#common_sense", isValidRating(common_sense), "Enter a rating between 0 and 10.");
-        validateField("#google_ratings", isValidRating(google_ratings), "Enter a rating between 0 and 10.");
+        validateField("#rotten_tomatoes", isValidRating(rotten_tomatoes), "Enter a rating between 0 and 100.");
+        validateField("#common_sense", isValidRating(common_sense), "Enter a rating between 0 and 5.");
+        validateField("#google_ratings", isValidRating(google_ratings), "Enter a rating between 0 and 100.");
         validateField("#genres", /^([a-zA-Z\s]+,?\s*)+$/.test(genres), "Enter valid genres separated by commas.");
         validateField("#similar-movies", /^(\d+,?\s*)+$/.test(similar_movie_ids), "Enter valid movie IDs, separated by commas.");
-        
-    
-        if (!isValid) return;
 
         let directorList = director ? director.split(',').map(item => item.trim()) : [];
         let actorsList = actors ? actors.split(',').map(item => item.trim()) : [];
@@ -189,7 +188,7 @@ $(document).ready(function(){
             "image": image,
             "release_year": release_year,
             "summary": summary,
-            "director": director,
+            "director": directorList,
             "actors": actorsList,
             "budget": budget ? parseInt(budget) : 0,
             "ratings": {
@@ -210,7 +209,7 @@ $(document).ready(function(){
         event.preventDefault();
         let movieId = $("#movie-id").val();
         let updatedMovie = {
-            "title": $("#title").val().trim(),
+            "title": $("#movie_title").val().trim(),
             "release_year": $("#release_year").val().trim(),
             "summary": $("#summary").val().trim(),
             "director": $("#director").val().trim().split(",").map(d => d.trim()),
